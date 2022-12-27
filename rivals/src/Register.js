@@ -10,7 +10,7 @@ const PWD_REGEX = /^(?=.*[a-z)(?=.*[A-Z])(?=.*[0-9])(?=.*[!@#$%]).{6,24}$/;
 
 
 const Register = () => {
-  const useRef = useRef()
+  const userRef = useRef()
   const errRef= useRef()
 
   const [user, setUser] = useState('')
@@ -28,8 +28,37 @@ const Register = () => {
   const [errMsg, setErrMsg] = useState("");
   const [success, setSuccess] = useState("");
 
+  useEffect(() => {
+    userRef.current.focus()
+  }, [])
+
+  useEffect(() => {
+    const result = USER_REGEX.test(user)
+    console.log(result);
+    console.log(user);
+    setValidName(result);
+  }, [user])
+
+  useEffect(() => {
+    const result = PWD_REGEX.test(pwd)
+    console.log(result);
+    console.log(pwd);
+    setValidPwd(result)
+    const match = pwd === matchPwd;
+    setValidMatch(match);
+  }, [pwd, matchPwd])
+
+  useEffect(() => {
+    setErrMsg('');
+  }, [user, pwd, matchPwd])
+
+
   return (
-    <div>Register</div>
+    <section>
+      <p ref={errRef} className={errMsg ? "errmsg": "offscreen"} aria-live="assertive">
+        {errMsg}
+      </p>
+    </section>
   )
 }
 
